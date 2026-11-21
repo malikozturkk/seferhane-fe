@@ -1,0 +1,42 @@
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-brand-wordmark);
+  font-family: var(--font-brand);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-display);
+  white-space: nowrap;
+  line-height: 1;
+}
+.sm {
+  font-size: 23px;
+  gap: 5px;
+}
+.md {
+  font-size: 25px;
+}
+.lg {
+  font-size: 29px;
+}
+.symbol {
+  color: var(--color-brand-symbol);
+  flex-shrink: 0;
+}
+.wordmark > small {
+  margin-left: 2px;
+  padding: 5px 7px;
+  border-radius: var(--radius-sm);
+  background: #e9f1e9;
+  color: #6e8a74;
+  font-family: var(--font-sans);
+  font-size: var(--text-3xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.5px;
+}
+.inverse {
+  color: #f4f5e9;
+}
+.inverse .symbol {
+  color: #d8ecaa;
+}

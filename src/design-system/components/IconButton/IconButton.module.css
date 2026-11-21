@@ -1,0 +1,46 @@
+.iconButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  color: var(--color-ink-icon);
+  border: 1px solid transparent;
+  background: transparent;
+}
+.sm {
+  width: 22px;
+  height: 22px;
+}
+.md {
+  width: 27px;
+  height: 27px;
+}
+.lg {
+  width: 31px;
+  height: 31px;
+}
+.ghost:hover:not(:disabled) {
+  background: var(--color-surface-nav-hover);
+  color: #225b40;
+}
+.outline {
+  border-color: var(--color-border);
+  background: var(--color-surface);
+}
+.outline:hover:not(:disabled) {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+  color: #225b40;
+}
+.indicator {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  right: 5px;
+  top: 4px;
+  background: var(--color-warning-dot);
+  border: 1px solid var(--color-surface);
+  border-radius: 50%;
+}

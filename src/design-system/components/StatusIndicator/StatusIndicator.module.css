@@ -1,0 +1,33 @@
+.wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.dot {
+  display: inline-block;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.md {
+  width: 6px;
+  height: 6px;
+}
+.sm {
+  width: 4px;
+  height: 4px;
+}
+.live {
+  background: var(--color-live);
+}
+.sm.live {
+  background: #9fc3a2;
+}
+.off {
+  background: var(--color-live-off);
+}
+.warning {
+  background: var(--color-warning-dot);
+}
+.danger {
+  background: var(--color-danger-strong);
+}

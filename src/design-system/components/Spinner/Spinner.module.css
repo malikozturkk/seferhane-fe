@@ -1,0 +1,20 @@
+/* Not present in the reference design — derived from brand + sage tokens. */
+.spinner {
+  display: inline-block;
+  flex-shrink: 0;
+  border-style: solid;
+  border-radius: 50%;
+  animation: var(--animate-spin);
+}
+.brand {
+  border-color: var(--color-sage-150);
+  border-top-color: var(--color-primary);
+}
+.current {
+  border-color: color-mix(in srgb, currentColor 25%, transparent);
+  border-top-color: currentColor;
+}
+.muted {
+  border-color: var(--color-border-subtle);
+  border-top-color: var(--color-ink-subtle);
+}

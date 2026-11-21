@@ -1,0 +1,310 @@
+/*
+ * Seferhane design tokens
+ * ------------------------------------------------------------------
+ * Source of truth: Figma Make "Seferhane Lojistik Yönetim Platformu"
+ * (src/index.css + the "Tasarım sistemi" catalogue in Settings).
+ *
+ * `@theme static` emits every variable on :root (so CSS Modules can use
+ * `var(--…)`) AND registers Tailwind utilities (`bg-surface`, `text-ink`,
+ * `rounded-xl`, `shadow-popover`, …).
+ */
+
+@theme static {
+  /* ---------------------------------------------------------------- */
+  /* Typography                                                        */
+  /* ---------------------------------------------------------------- */
+  --font-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-brand: var(--font-dm-sans), "DM Sans", var(--font-sans);
+
+  --text-*: initial;
+  --text-micro: 7px;
+  --text-3xs: 8px;
+  --text-2xs: 9px;
+  --text-xs: 10px;
+  --text-sm: 11px;
+  --text-base: 12px;
+  --text-md: 13px;
+  --text-lg: 14px;
+  --text-xl: 18px;
+  --text-2xl: 22px;
+  --text-3xl: 27px;
+  --text-4xl: 28px;
+  --text-display: 34px;
+
+  --font-weight-regular: 400;
+  --font-weight-book: 450;
+  --font-weight-medium: 500;
+  --font-weight-semibold-soft: 550;
+  --font-weight-semibold: 600;
+  --font-weight-bold-soft: 650;
+  --font-weight-bold: 700;
+
+  --leading-tight: 1.2;
+  --leading-snug: 1.35;
+  --leading-normal: 1.7;
+  --leading-relaxed: 1.9;
+
+  --tracking-display: -1.25px;
+  --tracking-metric: -1.1px;
+  --tracking-heading: -0.9px;
+  --tracking-title: -0.4px;
+  --tracking-tight: -0.2px;
+  --tracking-label: 1.15px;
+  --tracking-eyebrow: 1.5px;
+
+  /* ---------------------------------------------------------------- */
+  /* Colors — brand & primary action                                   */
+  /* ---------------------------------------------------------------- */
+  --color-brand: #168368; /* "Orman" */
+  --color-brand-mint: #e9f3ee; /* "Nane" */
+  --color-brand-symbol: #208165;
+  --color-brand-wordmark: #173f32;
+
+  --color-primary: #218365;
+  --color-primary-hover: #176f54;
+  --color-primary-fg: #ffffff;
+
+  --color-focus-ring: #9ad4c0;
+  --color-focus-ring-input: #91cbb8;
+  --color-selection: #cce8dc;
+  --color-selection-fg: #164d3b;
+  --color-live: #398f6a;
+  --color-live-off: #c0c8c2;
+
+  /* Ink (neutral text) */
+  --color-ink: #26352f; /* body */
+  --color-ink-strong: #20362b; /* page titles */
+  --color-ink-heading: #536853; /* panel titles */
+  --color-ink-value: #2a3d30; /* KPI values */
+  --color-ink-secondary: #5b6d61; /* button text */
+  --color-ink-nav: #67766d;
+  --color-ink-body: #687b6a; /* table cells */
+  --color-ink-emphasis: #526853; /* strong table text */
+  --color-ink-label: #647362; /* form labels */
+  --color-ink-muted: #8a9590;
+  --color-ink-subtle: #98a29a;
+  --color-ink-faint: #a4afa4;
+  --color-ink-placeholder: #a1ada2;
+  --color-ink-icon: #7a8980;
+
+  /* Surfaces */
+  --color-canvas: #f7f9f8; /* app background */
+  --color-surface: #ffffff;
+  --color-surface-subtle: #fbfcfb; /* sidebar, footers */
+  --color-surface-sunken: #fafcf9; /* table header */
+  --color-surface-muted: #f3f6f2; /* toggles, chips */
+  --color-surface-hover: #f1f6f2; /* button hover */
+  --color-surface-row-hover: #f6f9f5;
+  --color-surface-nav-hover: #edf3ee;
+  --color-surface-nav-active: #e8f1eb;
+  --color-overlay: #142d2355;
+
+  /* Borders */
+  --color-border: #e4eae6;
+  --color-border-subtle: #e8ece9;
+  --color-border-faint: #f0f3ee;
+  --color-border-strong: #dfe6e1;
+  --color-border-input: #dee6dd;
+  --color-border-hover: #c5d6c9;
+  --color-border-emphasis: #b4cebc;
+
+  /* Sage — the tinted green used by feedback surfaces (notice, toast,
+     empty, timeline, toggle, progress, modal, popover). */
+  --color-sage-25: #fcfdfb;
+  --color-sage-50: #f8fbf4;
+  --color-sage-100: #f2f7ed;
+  --color-sage-150: #edf4e5;
+  --color-sage-200: #e2ebd8;
+  --color-sage-300: #d5e3c8;
+  --color-sage-400: #a7c492;
+  --color-sage-500: #84ad62;
+  --color-sage-600: #779761;
+  --color-sage-700: #63845f;
+  --color-sage-800: #3c573c;
+  --color-sage-muted: #95a28c;
+  --color-sage-subtle: #afc09b;
+
+  /* Semantic states */
+  --color-success: #6c9b78;
+  --color-success-soft: #eef6ec;
+  --color-success-text: #478e68;
+
+  --color-info: #7695b5;
+  --color-info-soft: #eef3f9;
+
+  --color-warning: #b39864;
+  --color-warning-soft: #fbf5e8;
+  --color-warning-text: #bd9454;
+  --color-warning-strong: #c48a35; /* "Uyarı" */
+  --color-warning-emphasis: #a98140;
+  --color-warning-muted: #f7f0e3;
+  --color-warning-surface: #fdfcf9;
+  --color-warning-border: #ede6d9;
+  --color-warning-dot: #c89965;
+
+  --color-danger: #be7d73;
+  --color-danger-soft: #fbefeb;
+  --color-danger-strong: #ce655e; /* "Hata" */
+  --color-danger-surface: #fbf1ee;
+  --color-danger-border: #eed9d1;
+  --color-danger-icon: #c1846e;
+  --color-danger-text: #b57f6b;
+  --color-danger-muted: #b99b8c;
+
+  /* Decorative tones (icon tiles, avatars, load cards) */
+  --color-tone-orange: #c59a60;
+  --color-tone-orange-soft: #faf1e4;
+  --color-tone-purple: #a38bc1;
+  --color-tone-purple-soft: #f2eefa;
+  --color-tone-blue: #8da6cf;
+  --color-tone-blue-soft: #edf2fb;
+  --color-tone-green: #679c79;
+  --color-tone-green-soft: #eaf4ec;
+  --color-tone-sand: #8b7052; /* avatar */
+  --color-tone-sand-soft: #eee6db;
+
+  /* Data visualisation */
+  --color-chart-primary: #219676;
+  --color-chart-area: #21a781;
+  --color-chart-point: #239675;
+  --color-chart-comparison: #bac6c2;
+  --color-chart-grid: #edf0ef;
+  --color-chart-crosshair: #afcfc3;
+  --color-chart-axis: #a0aaa3;
+  --color-chart-axis-active: #4e7e61;
+  --color-chart-track: #f1f3f2;
+  --color-chart-bar-track: #f1f4ef;
+  --color-chart-1: #218e70;
+  --color-chart-2: #76b79f;
+  --color-chart-3: #9dbedb;
+  --color-chart-4: #c5b1db;
+  --color-chart-5: #dec492;
+  --color-chart-6: #e9a88f;
+  --color-chart-7: #b2cabb;
+  --color-chart-8: #ce655e;
+  --color-chart-9: #c8cfc4;
+  --color-status-transit: #1d9573;
+  --color-status-loading: #e9bd78;
+  --color-status-planned: #b6d9cb;
+  --color-status-delivered: #75bda6;
+  --color-status-docs: #c9b8e6;
+
+  /* ---------------------------------------------------------------- */
+  /* Radius                                                            */
+  /* ---------------------------------------------------------------- */
+  --radius-xs: 3px;
+  --radius-sm: 4px;
+  --radius-md: 5px;
+  --radius-lg: 6px;
+  --radius-xl: 7px;
+  --radius-2xl: 8px;
+  --radius-3xl: 10px;
+  --radius-4xl: 12px;
+
+  /* ---------------------------------------------------------------- */
+  /* Shadows                                                           */
+  /* ---------------------------------------------------------------- */
+  --shadow-xs: 0 1px 2px #20392c03;
+  --shadow-sm: 0 1px 3px #20392c03;
+  --shadow-primary: 0 2px 3px #16623d12, inset 0 1px 0 #ffffff12;
+  --shadow-card-hover: 0 4px 15px #29583c08;
+  --shadow-segment: 0 1px 3px #234c2910;
+  --shadow-tooltip: 0 3px 10px #1f3d2a09;
+  --shadow-dropdown: 0 8px 30px #173b3020;
+  --shadow-popover: 0 12px 45px #284d2820;
+  --shadow-toast: 0 8px 35px #294b2620;
+  --shadow-modal: 0 25px 100px #16341e30;
+
+  /* ---------------------------------------------------------------- */
+  /* Breakpoints (design: ≤700 mobile, ≤950 tablet, ≤1150 laptop,     */
+  /* ≥1500 wide). Tailwind breakpoints are min-width.                 */
+  /* ---------------------------------------------------------------- */
+  --breakpoint-*: initial;
+  --breakpoint-sm: 701px;
+  --breakpoint-md: 951px;
+  --breakpoint-lg: 1151px;
+  --breakpoint-xl: 1500px;
+
+  /* Motion */
+  --animate-appear: appear 0.16s ease-out;
+  --animate-shimmer: shimmer 1.8s infinite;
+  --animate-spin: spin 0.8s linear infinite;
+}
+
+:root {
+  /* Spacing — 4px base: 8 / 12 / 16 / 24 / 32 (Tailwind `--spacing` is 4px). */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* Borders */
+  --border-width: 1px;
+  --border: 1px solid var(--color-border);
+  --border-subtle: 1px solid var(--color-border-subtle);
+
+  /* Z-index scale */
+  --z-dropdown: 20;
+  --z-topbar: 25;
+  --z-sidebar: 40;
+  --z-popover: 70;
+  --z-drawer-overlay: 80;
+  --z-drawer: 90;
+  --z-modal: 100;
+  --z-toast: 150;
+  --z-tooltip: 160;
+
+  /* Layout */
+  --layout-sidebar-width: 232px;
+  --layout-topbar-height: 65px;
+  --layout-content-max: 1760px;
+  --layout-content-padding: 32px 32px 20px;
+
+  /* Motion */
+  --duration-fast: 0.12s;
+  --duration-base: 0.16s;
+  --duration-slow: 0.2s;
+}
+
+@media (max-width: 1150px) {
+  :root {
+    --layout-sidebar-width: 212px;
+    --layout-content-padding: 27px 24px 20px;
+  }
+}
+@media (max-width: 700px) {
+  :root {
+    --layout-sidebar-width: 244px;
+    --layout-topbar-height: 58px;
+    --layout-content-padding: 26px 17px 20px;
+  }
+}
+@media (min-width: 1500px) {
+  :root {
+    --layout-content-padding: 38px 42px 25px;
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    translate: 0 5px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
