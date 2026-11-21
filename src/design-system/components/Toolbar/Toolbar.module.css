@@ -1,0 +1,40 @@
+.toolbar {
+  display: flex;
+  gap: 15px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 17px 21px;
+}
+.end {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+@media (max-width: 700px) {
+  .toolbar {
+    padding: 16px;
+    flex-wrap: wrap;
+  }
+  .end {
+    margin-left: auto;
+  }
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 5px 8px;
+  background: #edf5ed;
+  border: 1px solid #dfebde;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-2xs);
+  color: #5d8a63;
+}
+.chip button {
+  display: flex;
+  color: inherit;
+  border-radius: var(--radius-xs);
+}
+.chip button:hover {
+  color: var(--color-brand);
+}

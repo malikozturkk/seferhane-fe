@@ -1,0 +1,98 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: var(--radius-sm);
+  font-weight: var(--font-weight-book);
+  white-space: nowrap;
+  line-height: var(--leading-tight);
+}
+.md {
+  padding: 4px 6px;
+  font-size: var(--text-2xs);
+}
+.sm {
+  padding: 3px 6px;
+  font-size: var(--text-micro);
+}
+.dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+.green {
+  color: var(--color-success);
+  background: var(--color-success-soft);
+}
+.blue {
+  color: var(--color-info);
+  background: var(--color-info-soft);
+}
+.amber {
+  color: var(--color-warning);
+  background: var(--color-warning-soft);
+}
+.red {
+  color: var(--color-danger);
+  background: var(--color-danger-soft);
+}
+
+/* Count ------------------------------------------------------------ */
+.count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-2xs);
+  font-weight: var(--font-weight-medium);
+  line-height: 14px;
+}
+.count-neutral {
+  min-width: 20px;
+  height: 18px;
+  padding: 0 4px;
+  line-height: 16px;
+  background: #edf1ec;
+  border: 1px solid #e5eae2;
+  color: #8b988b;
+  border-radius: var(--radius-sm);
+}
+.count-subtle,
+.count-alert {
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  font-weight: var(--font-weight-semibold);
+}
+.count-subtle {
+  color: #64756a;
+  background: #eaf0eb;
+}
+.count-alert {
+  color: var(--color-warning-emphasis);
+  background: #f5ecdc;
+}
+
+/* Pill ------------------------------------------------------------- */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  border-radius: var(--radius-xs);
+  font-weight: var(--font-weight-medium);
+}
+.pill-phase {
+  padding: 3px 5px;
+  font-size: var(--text-micro);
+  letter-spacing: 0.3px;
+  color: #8ea27e;
+  border: 1px solid #dfe9d6;
+  background: #f4f8ee;
+}
+.pill-new {
+  padding: 2px 4px;
+  font-size: 7px;
+  letter-spacing: 0.6px;
+  color: #628373;
+  background: #eaf1ec;
+}

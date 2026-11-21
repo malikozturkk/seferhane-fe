@@ -1,0 +1,85 @@
+/* Base element styles — mirrors `@layer base` of the Figma Make reference. */
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-size: var(--text-base);
+    -webkit-font-smoothing: antialiased;
+  }
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    -webkit-tap-highlight-color: transparent;
+  }
+  button,
+  select,
+  a {
+    cursor: pointer;
+  }
+  button {
+    transition:
+      background var(--duration-base),
+      color var(--duration-base),
+      border-color var(--duration-base),
+      box-shadow var(--duration-base);
+  }
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+  button:focus-visible,
+  a:focus-visible,
+  tr:focus-visible,
+  [role="button"]:focus-visible,
+  [role="tab"]:focus-visible {
+    outline: 3px solid var(--color-focus-ring);
+    outline-offset: 3px;
+  }
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: 2px solid var(--color-focus-ring-input);
+    outline-offset: 1px;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  p {
+    margin: 0;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-ink-placeholder);
+  }
+  ::selection {
+    background: var(--color-selection);
+    color: var(--color-selection-fg);
+  }
+  kbd {
+    font-family: inherit;
+    font-size: var(--text-2xs);
+    border: 1px solid #e4e9e5;
+    border-radius: var(--radius-xs);
+    background: #f8faf8;
+    padding: 2px 4px;
+    color: #89948e;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

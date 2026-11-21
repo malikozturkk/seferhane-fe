@@ -1,0 +1,127 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border-bottom: 1px solid #edf1e8;
+}
+.row:last-child {
+  border-bottom: 0;
+}
+.text {
+  flex: 1;
+  min-width: 0;
+}
+.text strong {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  color: #5a6e5c;
+}
+.text span {
+  display: block;
+  margin-top: 6px;
+  font-size: var(--text-2xs);
+  color: #96a28f;
+}
+.trailing {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.document {
+  padding: 20px 22px;
+}
+.finance {
+  padding: 18px 22px;
+  justify-content: space-between;
+}
+.finance .text span {
+  margin-top: 5px;
+  font-size: var(--text-3xs);
+}
+.finance .trailing {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
+  color: #5a6e5c;
+}
+.simple {
+  padding: 20px;
+  border-bottom-color: var(--color-border-subtle);
+}
+.simple .text strong {
+  font-size: var(--text-xs);
+  color: #8fa17b;
+  font-weight: var(--font-weight-regular);
+}
+@media (max-width: 700px) {
+  .document {
+    padding: 19px 16px;
+    gap: 11px;
+  }
+  .text strong {
+    font-size: var(--text-xs);
+  }
+  .text span {
+    font-size: var(--text-micro);
+    line-height: 1.7;
+  }
+}
+
+.dl {
+  margin: 0;
+}
+.dl dd {
+  margin: 0;
+}
+.rows > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 18px 20px;
+  font-size: var(--text-2xs);
+}
+.rows dt {
+  color: #96a28f;
+}
+.rows dd {
+  color: #5a6e5c;
+  font-weight: var(--font-weight-medium);
+  text-align: right;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  padding: 24px;
+}
+.grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.grid dt {
+  font-size: var(--text-2xs);
+  color: #96a28f;
+}
+.grid dd {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-normal);
+  color: #5a6e5c;
+}
+.positive {
+  color: var(--color-success-text) !important;
+}
+.warning {
+  color: var(--color-warning-text) !important;
+}
+@media (max-width: 700px) {
+  .grid {
+    padding: 22px 17px;
+    gap: 23px 18px;
+  }
+  .grid dd {
+    font-size: var(--text-xs);
+  }
+}
