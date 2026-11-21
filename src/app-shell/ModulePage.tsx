@@ -27,9 +27,11 @@ interface ModulePageProps {
  */
 export function ModulePage({ module, actions, title, description, phase, hideHeader, children }: ModulePageProps) {
   const mod = moduleById(module) as ModuleDef
-  const { reason } = useAccess()
+  const { me, reason } = useAccess()
   const access = reason(mod.resource)
 
+  // Session not resolved yet (server render / first paint): the shell shows the loader.
+  if (!me) return null
   if (access !== "ok") return <AccessDenied mod={mod} reason={access} />
 
   return (

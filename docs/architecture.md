@@ -7,14 +7,30 @@
 
 | Host | Yüzey | Kod |
 |---|---|---|
-| `seferhane.com` (apex) | Tanıtım (şimdilik demo bağlantı sayfası) | `src/app/page.tsx` |
+| `seferhane.com` (apex) | Tanıtım (şimdilik geçici sayfa) + **tek giriş sayfası** `/login` | `src/app/page.tsx`, `src/app/login/` |
 | `<slug>.seferhane.com` | Firma paneli, müşteri portalı, magic-link | `src/app/t/[tenant]/**` |
 | `admin.seferhane.com` | Platform & partner konsolu | `src/app/platform/**` |
 
 `src/proxy.ts` (Next 16 Proxy) host'u çözer ve iç route ağacına **rewrite** eder:
 `alpcengiz.seferhane.com/operations` → `/t/alpcengiz/operations`. Apex'ten `/t/*` ve `/platform/*`
-doğrudan açılamaz. Proxy yalnızca *iyimser* oturum kontrolü yapar (cookie yoksa `/login`);
+doğrudan açılamaz. Proxy yalnızca *iyimser* oturum kontrolü yapar (cookie yoksa merkezi girişe);
 asıl yetkilendirme API'dedir.
+
+### Merkezi giriş
+
+Alt alan adlarının kendi giriş ekranı yoktur; herkes `seferhane.com/login` üzerinden girer:
+
+1. Oturumsuz ziyaret (`alpcengiz.seferhane.com/fleet`) → `seferhane.com/login?next=<mutlak URL>`.
+   Proxy bunu kendisi yönlendirmez, `/api/v1/auth/signin`'e rewrite eder: Next.js proxy
+   yönlendirmelerinde hedef host kendi iç host'uyla aynıysa `Location`'ı göreli yapar ve alt alan adında döngü oluşur.
+2. `POST /api/v1/auth/login` e-posta + şifreyi **tüm** çalışma alanlarında (ve platform kullanıcılarında) arar,
+   her eşleşme için kısa ömürlü (60 sn), tek kullanımlık, imzalı bir *handoff* jetonu üretir
+   → `{ workspaces: [{ name, kind, host, url }] }`. Tek eşleşmede istemci doğrudan `url`'e gider; birden fazlaysa seçim listesi gösterilir.
+3. `GET <slug>.seferhane.com/api/v1/auth/callback?token=…` jetonu yakar, host'un tenant'ıyla eşleştiğini doğrular,
+   **host-only** oturum cookie'sini set eder ve `next` (yalnızca aynı çalışma alanındaysa) / `/` / `/portal`'a yönlendirir.
+   Platform & iş ortağı kullanıcıları `admin.seferhane.com`'a gider.
+
+Cookie'nin alan adı geneline (`.seferhane.com`) yazılmaması bilinçlidir: bir firmanın oturumu başka firmanın alt alan adına hiç gönderilmez.
 
 - Kök alan: `NEXT_PUBLIC_ROOT_DOMAIN` (varsayılan `localhost:3000`).
 - Geliştirme: `http://alpcengiz.localhost:3000`, `http://karadeniz.localhost:3000`, `http://admin.localhost:3000`
@@ -62,7 +78,7 @@ Ekran → useApiQuery/useListQuery/useApiMutation (TanStack Query)
 
 - Her koleksiyon `TenantData` altında tenant'a bağlı (`db.data[tenantId]`) — plan §10 "her tabloda `tenant_id`".
 - `defineHandler` her istekte host → tenant → oturum zincirini çözer; oturumun `tid`'si host tenant'ıyla eşleşmezse kullanıcı yok sayılır (401).
-- Oturum cookie'si (`sh_session`, HMAC imzalı, HttpOnly) **host-only**'dir; bir tenant'ın oturumu diğerine gitmez.
+- Oturum cookie'si (`sh_session`, HMAC imzalı, HttpOnly) **host-only**'dir; bir tenant'ın oturumu diğerine gitmez. Apex'ten alt alan adına geçiş handoff jetonuyla yapılır (§1).
 - Seed: `alpcengiz` (Profesyonel + Dış dünya + Analitik — Make verisi), `karadeniz` (Başlangıç — kilitler/limitler).
 
 ## 5. RBAC & paketler
@@ -101,11 +117,28 @@ Frontend yeniden yazılmaz; sadece veri kaynağı değişir:
 
 1. Backend `shared/contracts` şemalarını ve §3'teki liste/hata sözleşmesini uygular (Zod şemaları backend'de doğrudan kullanılabilir veya OpenAPI'ye çevrilir).
 2. `NEXT_PUBLIC_API_URL=https://api.seferhane.com/v1` ayarlanır. Tenant, host yerine `x-tenant-slug` başlığıyla da iletilebilir (sunucu her ikisini destekler).
-3. Oturum: backend kendi cookie/JWT'sini verir; `fetch` zaten `credentials: "include"` ile çalışır. `proxy.ts` iyimser kontrolde cookie adını günceller.
+3. Oturum: backend `POST /auth/login` (apex, `{ workspaces }` döner) ve `GET /auth/callback` (alt alan adında jetonu cookie'ye çevirir) uçlarını aynı sözleşmeyle uygular; `fetch` zaten `credentials: "include"` ile çalışır. `proxy.ts` iyimser kontrolde cookie adını günceller.
 4. `src/server/**` ve `src/app/api/**` silinir. `shared/auth/*` backend'e kopyalanır (tek yetki kaynağı).
 5. `DEMO_TODAY` kaldırılır (`clock.today()` → gerçek tarih).
 
-## 9. Demo hesapları (şifre: `demo1234`)
+## 9. Yayına alma (subdomain altyapısı)
+
+Kod tarafı (proxy) host → tenant eşlemesini yapar; ama isteklerin uygulamaya ulaşması **sunucu/DNS seviyesinde** ayarlanır.
+Firma başına ayar gerekmez — tek bir wildcard yeterlidir, yeni firma platform konsolundan oluşturulduğu anda erişilebilir olur:
+
+1. **DNS:** `seferhane.com` ve `*.seferhane.com` kayıtları aynı uygulamaya (A/CNAME) yönlenir.
+2. **TLS:** wildcard sertifika (`*.seferhane.com` + `seferhane.com`); Let's Encrypt'te DNS-01 doğrulaması gerekir.
+3. **Barındırma:**
+   - Vercel: projeye `seferhane.com` ve `*.seferhane.com` alan adlarını ekleyin (wildcard için nameserver'lar Vercel'de olmalı).
+   - Kendi sunucunuz (nginx vb.): `server_name seferhane.com .seferhane.com;` ve `proxy_set_header Host $host; proxy_set_header X-Forwarded-Proto $scheme;` ile Next'e iletin. Host başlığı korunmalı — tenant ondan çözülür.
+4. **Ortam değişkenleri:** `NEXT_PUBLIC_ROOT_DOMAIN=seferhane.com`, `SESSION_SECRET=<uzun rastgele değer>`.
+5. Rezerve alt alan adları (`www`, `api`, `app`, `static`, `cdn`, `admin`) tenant slug'ı olamaz (`shared/tenancy/host.ts`).
+
+Firmanın kendi alan adı (ör. `panel.alpcengiz.com`) ayrı bir iş kalemidir: alan adı başına DNS doğrulaması + sertifika ve `resolveHost`'a özel alan adı → tenant tablosu gerekir.
+
+## 10. Demo hesapları (şifre: `demo1234`)
+
+Giriş: `http://localhost:3000/login` — kullanıcı kendi çalışma alanına yönlendirilir.
 
 | Host | Hesap | Rol |
 |---|---|---|

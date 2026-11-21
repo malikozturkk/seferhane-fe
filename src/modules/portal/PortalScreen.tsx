@@ -36,6 +36,7 @@ import {
 import { useMe } from "@/app-shell/session"
 import { useLogout } from "@/app-shell/useLogout"
 import { fileSize } from "@/entities/trip/api"
+import { centralLoginUrl } from "@/shared/tenancy/host"
 import { ApiClientError, http } from "@/shared/api/http"
 import { useApiMutation, useApiQuery, useListQuery } from "@/shared/api/query"
 import type { Quote } from "@/shared/contracts/commercial"
@@ -70,7 +71,7 @@ export function PortalScreen() {
   const [complaint, setComplaint] = useState(false)
 
   useEffect(() => {
-    if (error instanceof ApiClientError && error.status === 401) router.replace("/login?next=/portal")
+    if (error instanceof ApiClientError && error.status === 401) window.location.assign(centralLoginUrl("/portal"))
     else if (me && me.user.kind !== "external") router.replace("/portal-preview")
   }, [error, me, router])
 

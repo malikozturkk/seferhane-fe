@@ -187,9 +187,16 @@ export interface Me {
   badges: Record<string, number>
 }
 
-export interface DemoAccount {
-  email: string
+/** One workspace the signed-in account can open (`POST /auth/login`). */
+export interface LoginWorkspace {
   name: string
-  roleName: string
-  kind: UserKind
+  kind: "panel" | "portal" | "platform"
+  /** e.g. `alpcengiz.seferhane.com` */
+  host: string
+  /** One-time handoff URL on the workspace subdomain. */
+  url: string
+}
+
+export interface LoginResult {
+  workspaces: LoginWorkspace[]
 }

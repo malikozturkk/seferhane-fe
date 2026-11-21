@@ -41,7 +41,8 @@ const PLAN_OPTIONS = (Object.keys(PLAN_INFO) as PlanKey[]).map((k) => ({ value: 
 /* ------------------------------------------------------------------ */
 
 export function PlatformHome() {
-  const { can } = useAccess()
+  const { me, can } = useAccess()
+  if (!me) return null
   return can("platform:tenants") ? <PlatformOverview /> : <PartnerPortfolio />
 }
 

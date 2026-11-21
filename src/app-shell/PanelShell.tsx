@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState, type ReactNode } from "react"
 import { AppShell, Container, SkeletonGroup } from "@/design-system"
 import { ApiClientError } from "@/shared/api/http"
+import { centralLoginUrl } from "@/shared/tenancy/host"
 import { AppHeader } from "./AppHeader"
 import { AppSidebar } from "./AppSidebar"
 import { CrumbProvider } from "./crumbs"
@@ -23,7 +24,7 @@ export function PanelShell({ children }: { children: ReactNode }) {
   // Session guards: no session → login; external user → portal.
   useEffect(() => {
     if (error instanceof ApiClientError && error.status === 401) {
-      router.replace(`/login?next=${encodeURIComponent(pathname)}`)
+      window.location.assign(centralLoginUrl(pathname))
     } else if (me && me.user.kind === "external") {
       router.replace("/portal")
     }
@@ -42,10 +43,15 @@ export function PanelShell({ children }: { children: ReactNode }) {
   }, [])
 
   if (isLoading || !me || me.user.kind !== "internal") {
+    // Keep the page segment in the tree (hidden) so Next.js can render and
+    // validate it on the server; the session only resolves in the browser.
     return (
-      <div className="mx-auto w-full max-w-3xl p-10">
-        <SkeletonGroup label="Çalışma alanı yükleniyor" />
-      </div>
+      <>
+        <div className="mx-auto w-full max-w-3xl p-10">
+          <SkeletonGroup label="Çalışma alanı yükleniyor" />
+        </div>
+        <div hidden>{children}</div>
+      </>
     )
   }
 

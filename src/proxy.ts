@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server"
-import { resolveHost, SESSION_COOKIE } from "@/shared/tenancy/host"
+import { resolveHost, SESSION_COOKIE, SIGNIN_NEXT_HEADER } from "@/shared/tenancy/host"
 
 /**
  * Multi-tenant routing (Next.js 16 Proxy):
@@ -7,11 +7,13 @@ import { resolveHost, SESSION_COOKIE } from "@/shared/tenancy/host"
  *   admin.<root>/path  → /platform/path   (platform & partner console)
  *   <root>/path        → /path            (marketing)
  *
+ * Sign-in is central: <root>/login. Workspace hosts send signed-out users
+ * there with `next` = the absolute URL they asked for.
+ *
  * Also performs the *optimistic* auth check (cookie present) — real
  * authorization happens in the API on every request.
  */
-const TENANT_PUBLIC = [/^\/login\/?$/, /^\/link\//]
-const PLATFORM_PUBLIC = [/^\/login\/?$/]
+const TENANT_PUBLIC = [/^\/link\//]
 
 export function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl
@@ -30,11 +32,23 @@ export function proxy(req: NextRequest) {
     return NextResponse.next()
   }
 
-  const isPublic = (surface.kind === "platform" ? PLATFORM_PUBLIC : TENANT_PUBLIC).some((r) => r.test(pathname))
+  /** Central login on the apex (see api/v1/auth/signin for why this is a rewrite). */
+  const centralLogin = (next: string | null) => {
+    // Rewrites keep the original query string, so `next` travels as a header.
+    const headers = new Headers(req.headers)
+    headers.delete(SIGNIN_NEXT_HEADER)
+    if (next) headers.set(SIGNIN_NEXT_HEADER, next)
+    return NextResponse.rewrite(new URL("/api/v1/auth/signin", req.url), { request: { headers } })
+  }
+  if (pathname === "/login" || pathname === "/login/") {
+    // Legacy per-workspace login → central login (keeps a relative `next`).
+    const next = req.nextUrl.searchParams.get("next")
+    return centralLogin(next?.startsWith("/") && !next.startsWith("//") ? at(next).toString() : null)
+  }
+
+  const isPublic = surface.kind === "tenant" && TENANT_PUBLIC.some((r) => r.test(pathname))
   if (!hasSession && !isPublic) {
-    const login = at("/login")
-    if (pathname !== "/") login.searchParams.set("next", pathname + search)
-    return NextResponse.redirect(login)
+    return centralLogin(pathname === "/" && !search ? null : at(pathname + search).toString())
   }
 
   const prefix = surface.kind === "platform" ? "/platform" : `/t/${surface.slug}`

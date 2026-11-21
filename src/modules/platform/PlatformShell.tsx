@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { useEffect, type ReactNode } from "react"
 import {
   AppShell,
@@ -22,20 +22,28 @@ import {
 import { useAccess, useMe } from "@/app-shell/session"
 import { useLogout } from "@/app-shell/useLogout"
 import { ApiClientError } from "@/shared/api/http"
+import { centralLoginUrl } from "@/shared/tenancy/host"
 
 /** admin.seferhane.com shell — platform admins and referral partners. */
 export function PlatformShell({ children }: { children: ReactNode }) {
-  const router = useRouter()
   const pathname = usePathname()
   const { data: me, error } = useMe()
   const { can } = useAccess()
   const logout = useLogout()
 
   useEffect(() => {
-    if (error instanceof ApiClientError && error.status === 401) router.replace("/login")
-  }, [error, router])
+    if (error instanceof ApiClientError && error.status === 401) window.location.assign(centralLoginUrl(pathname))
+  }, [error, pathname])
 
-  if (!me) return <div className="mx-auto max-w-3xl p-10"><SkeletonGroup /></div>
+  if (!me) {
+    // Page segment stays in the tree (hidden) for server rendering/validation.
+    return (
+      <>
+        <div className="mx-auto max-w-3xl p-10"><SkeletonGroup /></div>
+        <div hidden>{children}</div>
+      </>
+    )
+  }
   const admin = can("platform:tenants")
   const items = admin
     ? [

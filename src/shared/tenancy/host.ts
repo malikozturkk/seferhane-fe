@@ -38,3 +38,35 @@ export function platformUrl(path = "/") {
 }
 
 export const SESSION_COOKIE = "sh_session"
+/** proxy → /api/v1/auth/signin: absolute URL to return to after sign-in. */
+export const SIGNIN_NEXT_HEADER = "x-signin-next"
+
+/**
+ * Apex host for an incoming host, keeping the port (`alpcengiz.localhost:3000`
+ * → `localhost:3000`). Derived from the request instead of ROOT_DOMAIN so the
+ * same build works behind any port / preview domain.
+ */
+export function apexHostOf(host: string) {
+  const h = host.toLowerCase()
+  const surface = resolveHost(h)
+  if (surface.kind === "apex") return h.startsWith("www.") ? h.slice(4) : h
+  const sub = surface.kind === "platform" ? PLATFORM_SUBDOMAIN : surface.slug
+  return h.slice(sub.length + 1)
+}
+
+/** `<proto>://<sub>.<apex>` for a workspace subdomain (`null` → platform console). */
+export function workspaceOrigin(proto: string, apexHost: string, slug: string | null) {
+  return `${proto}://${slug ?? PLATFORM_SUBDOMAIN}.${apexHost}`
+}
+
+/**
+ * Central sign-in page on the apex domain (seferhane.com/login). Every
+ * workspace sends signed-out users here; `next` is the absolute URL to return to.
+ */
+export function centralLoginUrl(next?: string) {
+  if (typeof window === "undefined") return "/login"
+  const { protocol, host } = window.location
+  const url = new URL(`${protocol}//${apexHostOf(host)}/login`)
+  if (next) url.searchParams.set("next", new URL(next, window.location.href).toString())
+  return url.toString()
+}

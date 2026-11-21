@@ -1,5 +1,5 @@
+import Link from "next/link"
 import { Brand } from "@/design-system"
-import { tenantUrl, platformUrl } from "@/shared/tenancy/host"
 
 /** Temporary apex landing until the marketing site is built. */
 export default function Home() {
@@ -7,11 +7,9 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-canvas p-10 text-center">
       <Brand size="lg" />
       <p className="text-base text-ink-muted">Sefer planından kâra kadar, lojistiğin tamamı tek ekranda.</p>
-      <div className="flex flex-col gap-2 text-sm">
-        <a className="text-brand underline" href={tenantUrl("alpcengiz")}>alpcengiz — Alp Cengiz Lojistik (Profesyonel)</a>
-        <a className="text-brand underline" href={tenantUrl("karadeniz")}>karadeniz — Karadeniz Nakliyat (Başlangıç)</a>
-        <a className="text-brand underline" href={platformUrl()}>admin — Platform & partner konsolu</a>
-      </div>
+      <Link className="rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-fg shadow-primary hover:bg-primary-hover" href="/login">
+        Giriş yap
+      </Link>
     </main>
   )
 }
