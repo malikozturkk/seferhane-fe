@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, type ButtonHTMLAttributes, type ReactNode } from "react"
+import { useEffect, type ButtonHTMLAttributes, type ElementType, type ReactNode } from "react"
 import { ArrowUpRightIcon, ChevronDownIcon } from "../../icons"
 import { cn } from "../../utils/cn"
 import { Avatar } from "../Avatar/Avatar"
@@ -76,9 +76,11 @@ export interface NavItemProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   external?: boolean
   /** Render as link instead of button. */
   href?: string
+  /** Link component for client-side routing (e.g. Next.js `Link`). Default `a`. */
+  linkAs?: ElementType
 }
 
-export function NavItem({ icon, label, active, trailing, external, href, className, ...props }: NavItemProps) {
+export function NavItem({ icon, label, active, trailing, external, href, linkAs: LinkComp = "a", className, ...props }: NavItemProps) {
   const content = (
     <>
       {icon}
@@ -90,9 +92,9 @@ export function NavItem({ icon, label, active, trailing, external, href, classNa
   const cls = cn(styles.item, active && styles.active, className)
   if (href)
     return (
-      <a href={href} className={cls} aria-current={active ? "page" : undefined}>
+      <LinkComp href={href} className={cls} aria-current={active ? "page" : undefined}>
         {content}
-      </a>
+      </LinkComp>
     )
   return (
     <button type="button" className={cls} aria-current={active ? "page" : undefined} {...props}>

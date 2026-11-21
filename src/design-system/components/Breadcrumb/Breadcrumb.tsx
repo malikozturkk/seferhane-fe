@@ -1,4 +1,4 @@
-import { Fragment, type ReactNode } from "react"
+import { Fragment, type ElementType, type ReactNode } from "react"
 import { ChevronRightIcon } from "../../icons"
 import { cn } from "../../utils/cn"
 import styles from "./Breadcrumb.module.css"
@@ -12,11 +12,13 @@ export interface BreadcrumbItem {
 
 export interface BreadcrumbProps {
   items: BreadcrumbItem[]
+  /** Link component for client-side routing (e.g. Next.js `Link`). Default `a`. */
+  linkAs?: ElementType
   className?: string
 }
 
 /** Location trail (`.breadcrumbs`). The last item is the current page. */
-export function Breadcrumb({ items, className }: BreadcrumbProps) {
+export function Breadcrumb({ items, linkAs: LinkComp = "a", className }: BreadcrumbProps) {
   return (
     <nav aria-label="Konum" className={cn(styles.breadcrumb, className)}>
       <ol>
@@ -39,7 +41,7 @@ export function Breadcrumb({ items, className }: BreadcrumbProps) {
                 {last ? (
                   <span aria-current="page">{content}</span>
                 ) : item.href ? (
-                  <a href={item.href}>{content}</a>
+                  <LinkComp href={item.href}>{content}</LinkComp>
                 ) : item.onClick ? (
                   <button type="button" onClick={item.onClick}>
                     {content}

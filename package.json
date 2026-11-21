@@ -10,9 +10,14 @@
     "icons": "svgr --config-file scripts/svgr/svgr.config.cjs --out-dir src/design-system/icons/generated --filename-case pascal --silent -- src/design-system/icons/svg"
   },
   "dependencies": {
+    "@hookform/resolvers": "^7.0.8",
+    "@tanstack/react-query": "^5.108.2",
     "next": "16.4.6",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "react-hook-form": "^7.92.0",
+    "server-only": "^0.0.1",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@svgr/cli": "^8.1.0",

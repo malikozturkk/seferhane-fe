@@ -239,7 +239,7 @@ import { SearchIcon, BellIcon } from "@/design-system"
 | `IconButton` | `aria-label` (zorunlu), `icon`, `variant: ghost \| outline`, `size`, `indicator` | `indicator` = okunmamış noktası |
 | `Modal` + `ModalBody` + `ModalFooter` | `open`, `onClose`, `title`, `subtitle`, `size: md \| lg` | Client. Portal, focus trap, Escape, scroll lock. Footer'da sağa hizalı: `[İkincil] [Birincil]` |
 | `Drawer` | `open`, `onClose`, `side`, `width`, `title` | Client. *Sağ taraf türetilmiş* |
-| `DropdownMenu` | `trigger(props)`, `items[{key,label,icon,onSelect,selected,disabled}]`, `title`, `subtitle`, `footer`, `align` | Client. Trigger'a gelen `props`'u butona yay. Ok tuşları/Home/End/Escape |
+| `DropdownMenu` | `trigger(props)`, `items[{key,label,icon,onSelect,selected,disabled}]`, `title`, `subtitle`, `footer`, `align`, `side: bottom \| top` | Client. Trigger'a gelen `props`'u butona yay. Ok tuşları/Home/End/Escape |
 | `Popover` + `NotificationItem` | `trigger(props)`, `title`, `count`, `headerAction`, `width` | Client. Bildirim paneli |
 | `Tooltip` | `content`, `title`, `side`, tek odaklanabilir `children` | Client. *Türetilmiş* (grafik tooltip stili) |
 | `Tabs` + `TabPanel` | `items`, `value`/`onChange`, `variant: page \| panel`, `id` | Client. `panel` = kart içinde. Ok tuşlarıyla gezilir |
@@ -286,7 +286,7 @@ import { SearchIcon, BellIcon } from "@/design-system"
 | `ActionCard` | `icon`, `tone`, `title`, `description`, `linkLabel`, `indicator`, `onClick` | "Dikkat gerektirenler" kartları |
 | `IconTile` | `icon`, `tone`, `size`, `shape: rounded \| circle \| file` | İkon kutusu |
 | `Avatar` / `CompanyAvatar` | `name`, `size` / `name`, `initials`, `colorIndex` | Baş harfler otomatik |
-| `DataTable` | `data`, `columns[{key,header,cell,sortValue,align,width,hideOnMobile}]`, `getRowId`, `onRowClick`, `selectable`, `selectionActions`, `empty`, `footer`, `minWidth`, `aria-label` | Client. Tüm liste ekranları bununla yapılır |
+| `DataTable` | `data`, `columns[{key,header,cell,sortValue,align,width,hideOnMobile}]`, `getRowId`, `onRowClick`, `selectable`, `selectionActions`, `empty`, `footer`, `minWidth`, `sort` + `onSortChange` (kontrollü/sunucu sıralaması), `aria-label` | Client. Tüm liste ekranları bununla yapılır; sunucu sayfalamasında `useListState().tableSort/onTableSort` verin |
 | `Table`, `TableHead`, `TableBody`, `TableRow`, `TableHeaderCell`, `TableCell` | — | Özel tablo gerektiğinde primitive'ler |
 | `TableCellEntity`, `CellSub` | — | Hücre içi avatar+başlık+alt satır |
 | `ListItem` | `leading`, `title`, `description`, `trailing`, `variant: document \| finance \| simple` | Kart içi satırlar |
@@ -322,9 +322,9 @@ import { SearchIcon, BellIcon } from "@/design-system"
 | `Grid` | `layout: charts \| detail \| cols-2 \| cols-3` | `charts` = 1.95fr/1fr, `detail` = içerik + 290px aside |
 | `Stack` | `gap` | Dikey yığın |
 | `Divider` | `orientation`, `spacing` | |
-| `Sidebar` + `NavGroup` + `NavItem` + `WorkspaceSwitcher` + `SidebarProfile` | `brand`, `header`, `footer`, `mobileOpen`, `onMobileClose` / `label` / `icon`, `label`, `active`, `trailing`, `external`, `href` | Client. ≤700px'te off-canvas |
+| `Sidebar` + `NavGroup` + `NavItem` + `WorkspaceSwitcher` + `SidebarProfile` | `brand`, `header`, `footer`, `mobileOpen`, `onMobileClose` / `label` / `icon`, `label`, `active`, `trailing`, `external`, `href`, `linkAs` | Client. ≤700px'te off-canvas. Uygulamada `linkAs={Link}` (next/link) verin |
 | `Header` + `HeaderDivider` | `start`, `end`, `onMenuClick` | Topbar; `onMenuClick` mobil hamburger'i gösterir |
-| `Breadcrumb` | `items[{label,href,onClick,icon}]` | Son öğe = mevcut sayfa |
+| `Breadcrumb` | `items[{label,href,onClick,icon}]`, `linkAs` | Son öğe = mevcut sayfa |
 | `PageHeader` | `eyebrow`, `title`, `description`, `titleAddon`, `actions`, `back` | Her sayfanın başında **bir kez** |
 | `SectionHeader` | `title`, `count`, `action`, `as` | Sayfa içi bölüm başlığı |
 | `Eyebrow` | — | Büyük harfli üst etiket |
@@ -436,3 +436,13 @@ Kullanıcı istediği için eklendi; görsel dil mevcut token'lardan türetildi.
 
 - Pazarlama/tanıtım sitesi (Make'te `src/marketing/`, ayrı CSS ve renk dili) bu design system'e dahil değildir.
 - Badge tonunu metinden tahmin etmek gibi iş kuralları bileşenlerde yoktur; feature katmanında yazılır (örn. `statusTone(status): BadgeTone`).
+
+---
+
+## 13. Uygulama katmanında DS kullanımı
+
+- Uygulama mimarisi: `docs/architecture.md`.
+- Feature kodunda stil: DS bileşeni → `Grid`/`Stack`/`Card` düzeni → kalan küçük düzenler için **token isimli Tailwind** sınıfları (`text-ink-subtle`, `bg-sage-100`, `border-border-subtle`). Hex/arbitrary renk yazma.
+- **Dikkat:** CSS Modules katmansızdır, Tailwind utility'leri `@layer` içindedir → bir DS bileşeninin kendi stilini Tailwind ile ezemezsiniz (gerekirse `!` önekiyle, ör. `!px-0`). Görünüm değişikliği için DS'e varyant ekleyin.
+- Standart ekran iskeletleri: `app-shell/ModulePage` (başlık + yetki/paket kapısı) ve `app-shell/ModuleWorkspace` (istatistik + sekmeli kart + araç çubuğu + dışa aktarma).
+- Formlar: `shared/forms` (`useZodForm`, `Form`, `FormInput`, `FormSelect`, `FormDate`, `FormTextarea`, `applyServerErrors`) — DS `FormField` ile otomatik label/hata bağlantısı.

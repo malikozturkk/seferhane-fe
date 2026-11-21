@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { DM_Sans, Inter } from "next/font/google";
+import { Providers } from "@/app-shell/Providers";
 import "./globals.css";
 
 /* Design system fonts: Inter (UI) + DM Sans (brand wordmark). */
@@ -15,16 +17,18 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: "Seferhane",
-  description: "Seferhane",
+  description: "Sefer planından kâra kadar, lojistiğin tamamı tek ekranda.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="tr"
       className={`${inter.variable} ${dmSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

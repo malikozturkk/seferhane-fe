@@ -3,6 +3,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
+  // Tenant subdomains in development (alpcengiz.localhost:3000, admin.localhost:3000).
+  allowedDevOrigins: ["*.localhost"],
   partialPrefetching: true,
   turbopack: {
     rules: {

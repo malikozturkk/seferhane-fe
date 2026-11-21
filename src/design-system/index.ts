@@ -108,7 +108,12 @@ export {
   TableCellEntity,
   CellSub,
 } from "./components/Table/Table"
-export { DataTable, type DataTableProps, type DataTableColumn } from "./components/Table/DataTable"
+export {
+  DataTable,
+  type DataTableProps,
+  type DataTableColumn,
+  type DataTableSort,
+} from "./components/Table/DataTable"
 export { ListItem, DescriptionList, type ListItemProps, type DescriptionListProps } from "./components/ListItem/ListItem"
 export { Timeline, type TimelineProps, type TimelineItem } from "./components/Timeline/Timeline"
 

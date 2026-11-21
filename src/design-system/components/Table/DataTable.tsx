@@ -40,8 +40,19 @@ export interface DataTableProps<T> {
   /** Footer row (e.g. "5 operasyon gösteriliyor" + `<Pagination />`). */
   footer?: ReactNode
   minWidth?: number
+  /**
+   * Controlled sorting (server-side lists). When `onSortChange` is given the
+   * table does not reorder rows itself; it only reports the requested order.
+   */
+  sort?: DataTableSort | null
+  onSortChange?: (sort: DataTableSort | null) => void
   "aria-label": string
   className?: string
+}
+
+export interface DataTableSort {
+  key: string
+  dir: "asc" | "desc"
 }
 
 /** Feature-complete table used across modules (reference: `TripTable`). */
@@ -59,6 +70,8 @@ export function DataTable<T>({
   empty,
   footer,
   minWidth,
+  sort: sortProp,
+  onSortChange,
   className,
   ...props
 }: DataTableProps<T>) {
@@ -68,8 +81,12 @@ export function DataTable<T>({
     if (selectedIds === undefined) setInnerSelected(ids)
     onSelectionChange?.(ids)
   }
-  const [sort, setSort] = useState<{ key: string; dir: "asc" | "desc" } | null>(null)
+  const [innerSort, setInnerSort] = useState<DataTableSort | null>(null)
+  const controlled = onSortChange !== undefined
+  const sort = controlled ? (sortProp ?? null) : innerSort
+  const setSort = (next: DataTableSort | null) => (controlled ? onSortChange(next) : setInnerSort(next))
   const rows = useMemo(() => {
+    if (controlled) return data
     const col = sort && columns.find((c) => c.key === sort.key)
     if (!col?.sortValue) return data
     const get = col.sortValue
@@ -79,7 +96,7 @@ export function DataTable<T>({
       const r = typeof va === "number" && typeof vb === "number" ? va - vb : String(va).localeCompare(String(vb), "tr")
       return sort!.dir === "asc" ? r : -r
     })
-  }, [data, columns, sort])
+  }, [data, columns, sort, controlled])
   const chevron = showRowChevron ?? Boolean(onRowClick)
   const allIds = data.map(getRowId)
   const allSelected = data.length > 0 && allIds.every((id) => selected.includes(id))

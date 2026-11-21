@@ -31,6 +31,8 @@ export interface DropdownMenuProps {
   /** Helper text below the items (`.company-dropdown > span`). */
   footer?: ReactNode
   align?: "start" | "end"
+  /** Open below (default) or above the trigger (e.g. at the bottom of the sidebar). */
+  side?: "bottom" | "top"
   /** Width in px. Default 250 */
   width?: number | string
   open?: boolean
@@ -46,6 +48,7 @@ export function DropdownMenu({
   subtitle,
   footer,
   align = "end",
+  side = "bottom",
   width = 250,
   open: openProp,
   onOpenChange,
@@ -122,7 +125,7 @@ export function DropdownMenu({
         <div
           id={menuId}
           role="menu"
-          className={cn(styles.menu, styles[align])}
+          className={cn(styles.menu, styles[align], side === "top" && styles.top)}
           style={{ width }}
           onKeyDown={onMenuKey}
         >
